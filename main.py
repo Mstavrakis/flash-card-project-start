@@ -18,21 +18,21 @@ def dictionary_of_words():
     global lang
     global en_word, fr_word,pinyin_number,flip_timer_flip
 
-    data = pandas.read_csv("./data/french_words.csv")
-    fr_list = data.French.to_list()
+    data = pandas.read_csv("./data/chinese.csv")
+    fr_list = data.Simplified.to_list()
     fr_word = random.choice(fr_list)
     fr_number = fr_list.index(fr_word)
-    en_list = data.English.to_list()
-    # pinyin = data.Pinyin.to_list()
+    en_list = data.Meaning.to_list()
+    pinyin = data.Pinyin.to_list()
     en_word = en_list[fr_number]
-    # pinyin_number =pinyin[fr_number]
+    pinyin_number =pinyin[fr_number]
 
 
     # title_id=canvas.create_text(400, 150, text="French", font=("Arial", 40, "italic"))
     canvas.itemconfig(fr_front, image=card_back)
-    canvas.itemconfig(title_id, text="French",fill="white")
+    canvas.itemconfig(title_id, text="Chinese",fill="white")
     canvas.itemconfig(word_id, text=fr_word,fill="white")
-    # canvas.itemconfig(pinyin_id,text="")
+    canvas.itemconfig(pinyin_id,text="")
     flip_timer_flip=window.after(6000,func=flip_cards)
 
 
@@ -42,49 +42,49 @@ def flip_cards():
     canvas.itemconfig(fr_front, image=card_front)
     canvas.itemconfig(title_id, text="English",fill="black")
     canvas.itemconfig(word_id, text=en_word,fill="black")
-    # canvas.itemconfig(pinyin_id,text=pinyin_number)
+    canvas.itemconfig(pinyin_id,text=pinyin_number)
     flip_timer_dict=window.after(6000,func=dictionary_of_words)
 
 
 def remove_word():
     global fr_word
     global en_word,flip_timer_dict,flip_timer_flip
-    originalList = pandas.read_csv("./data/french_words.csv")
-    fr_list = originalList.French.to_list()
-    en_list = originalList.English.to_list()
+    originalList = pandas.read_csv("./data/chinese.csv")
+    fr_list = originalList.Simplified.to_list()
+    en_list = originalList.Meaning.to_list()
     # window.after_cancel(flip_timer_flip)
     try:
         store = pandas.read_csv("learned_words.csv")
         print(store)
-        words_delete_fr=store.French.to_list()
+        words_delete_fr=store.Simplified.to_list()
         print(words_delete_fr)
-        words_delete_en=store.English.to_list()
+        words_delete_en=store.Meaning.to_list()
         print(fr_word)
         words_delete_fr.remove(fr_word)
         words_delete_en.remove(en_word)
-        df = pandas.DataFrame({"French": words_delete_fr,"English":words_delete_en})
+        df = pandas.DataFrame({"Simplified": words_delete_fr,"Meaning":words_delete_en})
         # print(f"{df} try block")
         df.to_csv("learned_words.csv", index=False,mode="w")
 
 
     except FileNotFoundError:
         #path = Path("./data/learned_words.csv")
-        df=pandas.DataFrame({"French": fr_list, "English": en_list})
+        df=pandas.DataFrame({"Simplified": fr_list, "Meaning": en_list})
         df.to_csv("learned_words.csv",index=False)
 
 
 def add_word():
     global fr_word
     global en_word
-    store = pandas.read_csv("./data/french_words.csv")
+    store = pandas.read_csv("./data/chinese.csv")
     try:
         store = pandas.read_csv("learned_words.csv")
-        df = pandas.DataFrame({"French":[fr_word],"English":[en_word]})
+        df = pandas.DataFrame({"Simplified":[fr_word],"Meaning":[en_word]})
         df.to_csv("learned_words.csv",mode="a",index=False,header=False)
 
     except FileNotFoundError:
         # path = Path("./data/learned_words.csv")
-        df = pandas.DataFrame({"French":[fr_word],"English": [en_word]})
+        df = pandas.DataFrame({"Simplified":[fr_word],"Meaning": [en_word]})
         print(df)
         df.to_csv("learned_words.csv",mode="w",index=False)
 
