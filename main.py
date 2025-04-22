@@ -52,6 +52,7 @@ def remove_word():
     originalList = pandas.read_csv("./data/chinese.csv")
     fr_list = originalList.Simplified.to_list()
     en_list = originalList.Meaning.to_list()
+    pn_list = originalList.Pinyin.to_list()
     # window.after_cancel(flip_timer_flip)
     try:
         store = pandas.read_csv("learned_words.csv")
@@ -60,31 +61,33 @@ def remove_word():
         print(words_delete_fr)
         words_delete_en=store.Meaning.to_list()
         print(fr_word)
+        words_delete_pn=store.Pinyin.to_list()
         words_delete_fr.remove(fr_word)
         words_delete_en.remove(en_word)
-        df = pandas.DataFrame({"Simplified": words_delete_fr,"Meaning":words_delete_en})
+        words_delete_pn.remove(pinyin_number)
+        df = pandas.DataFrame({"Simplified": words_delete_fr,"Pinyin":words_delete_pn,"Meaning":words_delete_en})
         # print(f"{df} try block")
         df.to_csv("learned_words.csv", index=False,mode="w")
 
 
     except FileNotFoundError:
         #path = Path("./data/learned_words.csv")
-        df=pandas.DataFrame({"Simplified": fr_list, "Meaning": en_list})
+        df=pandas.DataFrame({"Simplified": fr_list, "Pinyin": pn_list, "Meaning": en_list})
         df.to_csv("learned_words.csv",index=False)
 
 
 def add_word():
     global fr_word
-    global en_word
+    global en_word,pinyin_number
     store = pandas.read_csv("./data/chinese.csv")
     try:
         store = pandas.read_csv("learned_words.csv")
-        df = pandas.DataFrame({"Simplified":[fr_word],"Meaning":[en_word]})
+        df = pandas.DataFrame({"Simplified":[fr_word],"Pinyin":[pinyin_number],"Meaning":[en_word]})
         df.to_csv("learned_words.csv",mode="a",index=False,header=False)
 
     except FileNotFoundError:
         # path = Path("./data/learned_words.csv")
-        df = pandas.DataFrame({"Simplified":[fr_word],"Meaning": [en_word]})
+        df = pandas.DataFrame({"Simplified":[fr_word],"Pinyin":[pinyin_number],"Meaning": [en_word]})
         print(df)
         df.to_csv("learned_words.csv",mode="w",index=False)
 
